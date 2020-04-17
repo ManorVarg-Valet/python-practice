@@ -12,37 +12,45 @@ def read_sudoku(grid_number):
     return sudoku
 
 
-def get_possible(y, x):
-    global sudoku
+def get_possible(y, x, puzzle):
+
     possible = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-    column = sudoku[y]
-    row = [position[x] for position in sudoku]
+    column = puzzle[y]
+    row = [position[x] for position in puzzle]
     grid_y, grid_x = 3*(y//3), 3*(x//3)
     grid = set()
     for i in range(3):
         for j in range(3):
-            grid.add(sudoku[grid_y+i][grid_x+j])
+            grid.add(puzzle[grid_y+i][grid_x+j])
 
     return possible - set(column) - set(row) - set(grid)
 
 
-def solve():
-    global sudoku
+def solve(puzzle):
     for y in range(9):
         for x in range(9):
-            if sudoku[y][x] == 0:
-                p = get_possible(y, x)
+            if puzzle[y][x] == 0:
+                p = get_possible(y, x, puzzle)
                 for num in p:
-                    sudoku[y][x] = num
-                    solve()
-                    sudoku[y][x] = 0
+                    puzzle[y][x] = num
+                    solve(puzzle)
+                    puzzle[y][x] = 0
 
                 return
-    print(sudoku)
     return
 
 
 sudoku = read_sudoku(1)
-test = solve()
-test
+solve(sudoku)
+print(sudoku)
+
+
+# nums = []
+# for i in range(1, 51):
+#     complete = None
+#     sudoku = read_sudoku(i)
+#     solve()
+#     nums.append(int(''.join((str(i) for i in complete[0][:3]))))
+# print(nums)
+# print(sum(nums))
 
